@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: internal-app-svc
+  labels:
+    app: internal-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: internal-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
