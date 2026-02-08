@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: internal-app
+  labels:
+    app: internal-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: internal-app
+  template:
+    metadata:
+      labels:
+        app: internal-app
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.27-alpine
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: internal-app-svc
+  labels:
+    app: internal-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: internal-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: public-app
+  labels:
+    app: public-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: public-app
+  template:
+    metadata:
+      labels:
+        app: public-app
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.27-alpine
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: public-app-svc
+  labels:
+    app: public-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: public-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
